@@ -33,6 +33,7 @@ def register_dashapps(app):
 
     with app.app_context():
         dashapp1.title = 'Synthetic bars'
+        dashapp1.title = 'Synthetic bars'
         dashapp1.layout = layout
         dashapp1.index_string = index_string
         register_callbacks(dashapp1)

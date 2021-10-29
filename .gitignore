@@ -1,3 +1,6 @@
+#
+venv/
+
 # Cache
 __pycache__
 

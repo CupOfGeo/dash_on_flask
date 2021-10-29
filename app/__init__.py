@@ -18,8 +18,7 @@ def create_app():
 
 
 def register_dashapps(app):
-    from app.dashapp1.layout import layout
-    from app.dashapp1.callbacks import register_callbacks
+    from app.dashapp1.barapp import layout, register_callbacks, index_string
 
     # Meta tags for viewport responsiveness
     meta_viewport = {
@@ -29,12 +28,13 @@ def register_dashapps(app):
     dashapp1 = dash.Dash(__name__,
                          server=app,
                          url_base_pathname='/dashboard/',
-                         assets_folder=get_root_path(__name__) + '/dashboard/assets/',
+                         assets_folder=get_root_path(__name__) + '/dashapp1/assets/',
                          meta_tags=[meta_viewport])
 
     with app.app_context():
-        dashapp1.title = 'Dashapp 1'
+        dashapp1.title = 'Synthetic bars'
         dashapp1.layout = layout
+        dashapp1.index_string = index_string
         register_callbacks(dashapp1)
 
     _protect_dashviews(dashapp1)

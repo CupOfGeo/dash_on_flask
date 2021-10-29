@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17813b57-ee5b-4309-be23-54a6f2b1356e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/assets/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/dashapp1/assets/test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/dashapp1/barapp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashapp1/callbacks.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashapp1/layout.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

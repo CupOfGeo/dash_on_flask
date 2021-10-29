@@ -9,6 +9,7 @@ __pycache__
 
 # IDE
 .vscode
+.idea
 
 # Settings
 .envrc

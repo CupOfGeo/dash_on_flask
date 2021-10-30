@@ -30,7 +30,8 @@ def index():
     try:
         resp = google.get("/oauth2/v1/userinfo")
         assert resp.ok, resp.text
-        login_user(resp.json()["email"])
+        user = User(username=resp.json()["email"])
+        login_user(user)
 
     except TokenExpiredError as e:
         return redirect(url_for("google.login"))

@@ -55,7 +55,7 @@ def register_extensions(server):
 
     db.init_app(server)
     login.init_app(server)
-    login.login_view = 'main.login'
+    login.login_view = 'google.login'
     migrate.init_app(server, db)
 
 

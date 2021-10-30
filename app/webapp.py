@@ -17,9 +17,9 @@ from app.models import User
 server_bp = Blueprint('main', __name__)
 
 # Now synthtic bars
-# @server_bp.route('/')
-# def index():
-#     return render_template("index.html", title='Home Page')
+@server_bp.route('/')
+def index():
+    return render_template("index.html", title='Home Page')
 
 
 @server_bp.route('/login/', methods=['GET', 'POST'])

@@ -7,7 +7,7 @@ def get_sqlite_uri():
     return f'sqlite:///{basedir}/{db_name}'
 
 def get_postgress_uri():
-    return os.environ['HEROKU_POSTGRESQL_RED_URL']
+    return os.environ['HEROKU_POSTGRESQL_RED_URL'].replace('postgres:','postgresql:')
 
 class BaseConfig:
     # get_sqlite_uri()

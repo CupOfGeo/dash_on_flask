@@ -61,9 +61,9 @@ def register_extensions(server):
 
 def register_blueprints(server):
     from app.webapp2 import google_bp
-    #from app.webapp import server_bp
+    from app.webapp import server_bp
 
 
     server.register_blueprint(google_bp, url_prefix="/login")
-    #server.register_blueprint(server_bp)
+    server.register_blueprint(server_bp)
 

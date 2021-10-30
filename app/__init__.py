@@ -64,6 +64,6 @@ def register_blueprints(server):
     #from app.webapp import server_bp
 
 
-    server.register_blueprint(google_bp, url_prefix="/login")
+    server.register_blueprint(google_bp)
     #server.register_blueprint(server_bp)
 

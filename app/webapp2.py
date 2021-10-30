@@ -32,5 +32,6 @@ def index():
         assert resp.ok, resp.text
     except TokenExpiredError as e:
         return redirect(url_for("google.login"))
+    print(resp.json()['profile'])
     return "You are {email} on Google".format(email=resp.json()["email"])
 

@@ -30,9 +30,12 @@ def index():
     try:
         resp = google.get("/oauth2/v1/userinfo")
         assert resp.ok, resp.text
+        login_user(resp.json()["email"])
+
     except TokenExpiredError as e:
         return redirect(url_for("google.login"))
-    print(resp.json())
-    #print('{profile}'.format(profile=resp.json()['profile']))
+    #print(resp.json())
+    #{'id': 'xxx', 'email': 'mazzeogeorge@gmail.com', 'verified_email': True, 'name': 'George Mazzeo',
+
     return "You are {email} on Google".format(email=resp.json()["email"])
 

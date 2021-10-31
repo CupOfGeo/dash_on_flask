@@ -75,6 +75,6 @@ def register_blueprints(server):
     server.register_blueprint(server_bp, url_prefix="/account")
     server.register_blueprint(google_bp, url_prefix="/google_login")
     server.register_blueprint(stripe_bp, url_prefix=stripe_prefix)
-    server.register_blueprint(https_bp,url_prefix='/.well-known/acme-challenge/p6sRGSUYKKN3uUVQmxHhAZXK6VHAVikV2Gy0fgfZHxY')
+    server.register_blueprint(https_bp,url_prefix='/.well-known/acme-challenge/TKQ2uV9JSfjoUVDIoms_JAkJda4arCa9VDupwFJZjqg')
 
 

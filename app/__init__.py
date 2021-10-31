@@ -2,14 +2,16 @@ import dash
 from flask import Flask
 from flask.helpers import get_root_path
 from flask_login import login_required
+from flask_bootstrap import Bootstrap
 
 from config import BaseConfig
-
+import dash_bootstrap_components as dbc
 
 def create_app():
     server = Flask(__name__)
     server.config.from_object(BaseConfig)
 
+    bootstrap = Bootstrap(server)
     register_dashapps(server)
     register_extensions(server)
     register_blueprints(server)
@@ -29,16 +31,15 @@ def register_dashapps(app):
                          server=app,
                          url_base_pathname='/',
                          assets_folder=get_root_path(__name__) + '/dashapp1/assets/',
-                         meta_tags=[meta_viewport])
+                         meta_tags=[meta_viewport],external_stylesheets=[dbc.themes.LUX])
 
     with app.app_context():
-        dashapp1.title = 'Synthetic bars'
         dashapp1.title = 'Synthetic bars'
         dashapp1.layout = layout
         dashapp1.index_string = index_string
         register_callbacks(dashapp1)
 
-    _protect_dashviews(dashapp1)
+    # _protect_dashviews(dashapp1)
 
 
 def _protect_dashviews(dashapp):
@@ -55,7 +56,7 @@ def register_extensions(server):
 
     db.init_app(server)
     login.init_app(server)
-    login.login_view = 'google.login'
+    login.login_view = 'main.login'
     migrate.init_app(server, db)
 
 
@@ -63,7 +64,7 @@ def register_blueprints(server):
     from app.webapp2 import google_bp
     from app.webapp import server_bp
 
-
+    server.register_blueprint(server_bp, url_prefix="/account")
     server.register_blueprint(google_bp, url_prefix="/google_login")
-    server.register_blueprint(server_bp)
+
 

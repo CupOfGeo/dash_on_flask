@@ -16,7 +16,11 @@ from app.models import User
 
 server_bp = Blueprint('main', __name__)
 
-# Now synthtic bars
+def is_logged_in():
+    return current_user.is_authenticated
+
+
+
 @server_bp.route('/')
 def index():
     return render_template("index.html", title='Home Page')

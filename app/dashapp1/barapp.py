@@ -1,15 +1,80 @@
 import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
-#import dash_core_components as dcc
-#import dash_html_components as html
 from dash.dependencies import Input, Output, State, MATCH, ALL, ClientsideFunction
 
 import json
 import requests
 import os
+import base64
+from ..webapp import is_logged_in
+
+nav_bar = """
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Ghost Rhymes</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Rapper
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Train Your Own</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav navbar-right">
+        <li class="nav-item">
+          <a class="nav-link" href="/account/login">login</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+"""
+
+if is_logged_in:
+    nav_bar = """
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Ghost Rhymes</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Rapper
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Train Your Own</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+      </ul>
 
 
+      <ul class="navbar-nav navbar-right">
+        <li class="nav-item">
+          <a class="nav-link" href="/account/logout">logout</a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</nav>
+"""
 
 # TODO Make new raw_outputs.txt
 # raw_outputs = []
@@ -19,11 +84,8 @@ import os
 #     if line != '':
 #         raw_outputs.append(line)
 
-# external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-#
-# app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-index_string = '''
+index_string_top = '''
 <!DOCTYPE html>
 <html>
     <head>
@@ -37,6 +99,9 @@ index_string = '''
 
     </head>
     <body>
+'''
+
+index_string_bot = '''
         {%app_entry%}
         <footer>
             {%config%}
@@ -58,10 +123,9 @@ index_string = '''
         </body>
 </html>
 '''
-
+index_string = index_string_top + nav_bar + index_string_bot
 # app = dash.Dash(__name__, suppress_callback_exceptions=True)
 
-print('App is starting..')
 
 # Generate more button
 # more More More! More!! MORE MORE! MORE!!! MMOORREE!!! MOOOORRREEE!
@@ -71,9 +135,60 @@ gen_button = dbc.Button(
     style={'margin-top': '1%', 'width': '81%', 'height': '1%', 'line-height': '200%', 'font-size': '300%'}
 )
 
+# image_filename = 'app/dashapp1/assets/cup.png'  # logo
+# encoded_image = base64.b64encode(open(image_filename, 'rb').read())
+#
+# # make a reuseable navitem for the different examples
+# nav_item = dbc.NavItem(dbc.NavLink("Home", href="/account"))
+#
+# # make a reuseable dropdown for the different examples
+# dropdown = dbc.DropdownMenu(
+#     children=[
+#         dbc.DropdownMenuItem("Login", href="/account/login"),
+#
+#         dbc.DropdownMenuItem(divider=True),
+#         dbc.DropdownMenuItem("Coming soon"),
+#
+#     ],
+#     nav=True,
+#     in_navbar=True,
+#     label="Menu",
+# )
+#
+# nav_bar = dbc.Navbar(
+#     dbc.Container(
+#         [
+#             html.A(
+#                 # Use row and col to control vertical alignment of logo / brand
+#                 dbc.Row(
+#                     [
+#                         dbc.Col(html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()), height="50px")),
+#                         dbc.Col(dbc.NavbarBrand("George Mazzeo", className="ml-2")),
+#                     ],
+#                     align="center",
+#                 ),
+#
+#             ),
+#             dbc.NavbarToggler(id="navbar-toggler2"),
+#             dbc.Collapse(
+#                 dbc.Nav(
+#                     [nav_item, dropdown], className="ml-auto", navbar=True
+#                 ),
+#                 id="navbar-collapse2",
+#                 navbar=True,
+#             ),
+#         ]
+#     ),
+#     color="dark",
+#     dark=True,
+#     className="mb-5",
+# )
+
 # The app layout
 layout = html.Div([
+
     # title
+
     html.H1("Synthetic Bars", style={'text-align': 'center', }),
 
     html.Div(
@@ -145,6 +260,7 @@ layout = html.Div([
 
 ])
 
+
 def register_callbacks(dashapp):
     dashapp.clientside_callback(
         """
@@ -167,10 +283,9 @@ def register_callbacks(dashapp):
         Input('div-mobile', 'n_clicks')
     )
 
-
     # IsMobile styling
     @dashapp.callback(Output('sliders-div', 'style'),
-                  [Input('div-mobile', 'children')], )
+                      [Input('div-mobile', 'children')], )
     def style_mobile(is_mobile):
         # print(is_mobile)
         if is_mobile:
@@ -181,9 +296,8 @@ def register_callbacks(dashapp):
             rows = '10'
             style = {'transform': 'scale(2)', 'display': 'block', 'margin-top': '5%', 'margin-left': 'auto',
                      'margin-right': 'auto', 'width': '45%'}
-        #return rows, style
+        # return rows, style
         return style
-
 
     @dashapp.callback(
         [Output('dynamic-button-container', 'children'),
@@ -200,7 +314,7 @@ def register_callbacks(dashapp):
     def display_newbutton(n_clicks, children, textarea, temp, max_tokens, store_data):
         # on page load
         if n_clicks is None:
-            return children, textarea, '2','', {'clicks': 0}
+            return children, textarea, '2', '', {'clicks': 0}
         else:
             store_data['clicks'] += 1
 
@@ -225,7 +339,6 @@ def register_callbacks(dashapp):
 
             return children, out, str(rows), '', store_data
 
-
     @dashapp.callback(
         Output('gen-button', 'disabled'),
         [Input('gen-button', 'n_clicks')]
@@ -236,7 +349,6 @@ def register_callbacks(dashapp):
         else:
             print('Disabling the button')
             return True
-
 
     def generate_out(prompt, temp, length):
         TEMP_URL = os.getenv('API_URL')
@@ -254,5 +366,3 @@ def register_callbacks(dashapp):
             return out
         else:
             return 'MORE!'
-
-

@@ -39,7 +39,6 @@ nav_bar = """
     </div>
   </div>
 </nav>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
 """
 
 if is_logged_in:
@@ -101,7 +100,6 @@ index_string_top = '''
     </head>
     <body>
 '''
-
 index_string_bot = '''
         {%app_entry%}
         <footer>
@@ -133,65 +131,13 @@ index_string = index_string_top + nav_bar + index_string_bot
 gen_button = dbc.Button(
     id='gen-button',
     children='more',
-    style={'margin-top': '1%', 'width': '81%', 'height': '1%', 'line-height': '200%', 'font-size': '300%'}
+    style={'margin-top': '1%', 'width': '80%', 'height': '2%', 'line-height': '200%', 'font-size': '300%'}
 )
-
-# image_filename = 'app/dashapp1/assets/cup.png'  # logo
-# encoded_image = base64.b64encode(open(image_filename, 'rb').read())
-#
-# # make a reuseable navitem for the different examples
-# nav_item = dbc.NavItem(dbc.NavLink("Home", href="/account"))
-#
-# # make a reuseable dropdown for the different examples
-# dropdown = dbc.DropdownMenu(
-#     children=[
-#         dbc.DropdownMenuItem("Login", href="/account/login"),
-#
-#         dbc.DropdownMenuItem(divider=True),
-#         dbc.DropdownMenuItem("Coming soon"),
-#
-#     ],
-#     nav=True,
-#     in_navbar=True,
-#     label="Menu",
-# )
-#
-# nav_bar = dbc.Navbar(
-#     dbc.Container(
-#         [
-#             html.A(
-#                 # Use row and col to control vertical alignment of logo / brand
-#                 dbc.Row(
-#                     [
-#                         dbc.Col(html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()), height="50px")),
-#                         dbc.Col(dbc.NavbarBrand("George Mazzeo", className="ml-2")),
-#                     ],
-#                     align="center",
-#                 ),
-#
-#             ),
-#             dbc.NavbarToggler(id="navbar-toggler2"),
-#             dbc.Collapse(
-#                 dbc.Nav(
-#                     [nav_item, dropdown], className="ml-auto", navbar=True
-#                 ),
-#                 id="navbar-collapse2",
-#                 navbar=True,
-#             ),
-#         ]
-#     ),
-#     color="dark",
-#     dark=True,
-#     className="mb-5",
-# )
 
 # The app layout
 layout = html.Div([
-
     # title
-
-    html.H1("Synthetic Bars", style={'text-align': 'center', }),
-
+    # html.H1("Synthetic Bars", style={'text-align': 'center', }),
     html.Div(
         [
             # Main Text
@@ -201,6 +147,7 @@ layout = html.Div([
                                 'display': 'block',
                                 'margin-left': 'auto',
                                 'margin-right': 'auto',
+                                'margin-top': '2%',
                                 'font-size': '250%',
                                 'border': '1px solid black'}),
 
@@ -252,8 +199,7 @@ layout = html.Div([
             },
             included=False
         ),
-    ], style={'transform': 'scale(4)', 'display': 'block', 'margin-top': '5%', 'margin-left': 'auto',
-              'margin-right': 'auto', 'width': '25%'}),
+    ], ),
 
     html.P(id='placeholder'),
     html.Div(id='div-mobile', style={"display": "none"}),
@@ -288,11 +234,11 @@ def register_callbacks(dashapp):
     @dashapp.callback(Output('sliders-div', 'style'),
                       [Input('div-mobile', 'children')], )
     def style_mobile(is_mobile):
-        # print(is_mobile)
+        print("IS MOBILE:", is_mobile)
         if is_mobile:
             rows = '20'
-            style = {'transform': 'scale(4)', 'display': 'block', 'margin-top': '12%', 'margin-left': 'auto',
-                     'margin-right': 'auto', 'width': '25%'}
+            style = {'transform': 'scale(2.5)', 'display': 'block', 'margin-top': '15%', 'margin-left': 'auto',
+                     'margin-right': 'auto', 'width': '40%'}
         else:
             rows = '10'
             style = {'transform': 'scale(2)', 'display': 'block', 'margin-top': '5%', 'margin-left': 'auto',
@@ -326,15 +272,11 @@ def register_callbacks(dashapp):
             out = generate_out(textarea, temp, max_tokens)
 
             children.pop()
-            more = ['more', 'More', 'More!', 'More!!', 'MORE', 'MORE!', 'MORE!!!', 'MMOORREE!!!', 'MOOOORRREEE!!!!!!!']
+            more = ['More', 'More!', 'More!!', 'MORE', 'MORE!', 'MORE!!!', 'MMOORREE!!!', 'MOOOORRREEE!!!!!!!']
 
-            gen_button = dbc.Button(
-                id='gen-button',
-                children=more[store_data['clicks'] % len(more)],
-                style={'margin-top': '1%', 'width': '81%', 'height': '1%', 'line-height': '200%', 'font-size': '300%'}
-            )
+            gen_button.children = more[store_data['clicks'] % len(more)]
             children.append(gen_button)
-            print('Generating a new button')
+            # print('Generating a new button')
             rows = out.count('\n')
             rows = rows + 1
 

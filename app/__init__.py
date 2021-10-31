@@ -22,16 +22,20 @@ def create_app():
 def register_dashapps(app):
     from app.dashapp1.barapp import layout, register_callbacks, index_string
 
+
     # Meta tags for viewport responsiveness
     meta_viewport = {
         "name": "viewport",
-        "content": "width=device-width, initial-scale=1, shrink-to-fit=no"}
+        "content": "width=device-width, initial-scale=1, shrink-to-fit=yes"}
 
     dashapp1 = dash.Dash(__name__,
                          server=app,
                          url_base_pathname='/',
                          assets_folder=get_root_path(__name__) + '/dashapp1/assets/',
-                         meta_tags=[meta_viewport],external_stylesheets=[dbc.themes.LUX])
+                         meta_tags=[meta_viewport],external_stylesheets=[dbc.themes.LUX],
+                         )
+
+
 
     with app.app_context():
         dashapp1.title = 'Synthetic bars'

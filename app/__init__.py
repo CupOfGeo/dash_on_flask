@@ -7,6 +7,8 @@ from flask_bootstrap import Bootstrap
 from config import BaseConfig
 import dash_bootstrap_components as dbc
 
+
+
 def create_app():
     server = Flask(__name__)
     server.config.from_object(BaseConfig)
@@ -67,8 +69,12 @@ def register_extensions(server):
 def register_blueprints(server):
     from app.webapp2 import google_bp
     from app.webapp import server_bp
+    from app.stripe_payment import stripe_bp, stripe_prefix
+    from app.https import https_bp
 
     server.register_blueprint(server_bp, url_prefix="/account")
     server.register_blueprint(google_bp, url_prefix="/google_login")
+    server.register_blueprint(stripe_bp, url_prefix=stripe_prefix)
+    server.register_blueprint(https_bp,url_prefix='/.well-known/acme-challenge/p6sRGSUYKKN3uUVQmxHhAZXK6VHAVikV2Gy0fgfZHxY')
 
 

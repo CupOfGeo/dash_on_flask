@@ -260,26 +260,29 @@ def register_callbacks(dashapp):
          State('session', 'data')])
     def display_newbutton(n_clicks, children, textarea, temp, max_tokens, store_data):
         # on page load
+        print("TYPE:",type(max_tokens))
+
         if n_clicks is None:
             return children, textarea, '2', '', {'clicks': 0}
         else:
             store_data['clicks'] += 1
 
             # TODO generate a bunch of fake songs for raw_outputs.txt
-            # if textarea == '':
-            #     out = random.choice(raw_outputs)
-            # else:
+            if textarea == '':
+                # out = random.choice(raw_outputs)
+                textarea = '[Verse 1:'
+
+
             out = generate_out(textarea, temp, max_tokens)
 
             children.pop()
-            more = ['More', 'More!', 'More!!', 'MORE', 'MORE!', 'MORE!!!', 'MMOORREE!!!', 'MOOOORRREEE!!!!!!!']
+            more = ['More', 'More!', 'More!!', 'MORE!!!', 'MMOORREE!!!', 'MOOOORRREEE!!!!!!!']
 
             gen_button.children = more[store_data['clicks'] % len(more)]
             children.append(gen_button)
             # print('Generating a new button')
             rows = out.count('\n')
             rows = rows + 1
-
             return children, out, str(rows), '', store_data
 
     @dashapp.callback(
@@ -294,18 +297,17 @@ def register_callbacks(dashapp):
             return True
 
     def generate_out(prompt, temp, length):
-        TEMP_URL = os.getenv('API_URL')
+        RAPPER_API = os.getenv('API_URL')
 
-        if TEMP_URL:
-            data = {'text': prompt, 'temp': temp, 'length': length}
+        if RAPPER_API:
+            data = {'text': prompt, 'max_tokens': length, 'temp': temp}
             data_json = json.dumps(data)
-            temp_url = TEMP_URL + '/items/'
-            r = requests.get(temp_url, data=data_json)
+            r = requests.get(RAPPER_API, data=data_json)
             if r.status_code == 200:
                 out = r.json()['out']
-                # out = out.replace('\\n','\n')
+                out = out.replace('\\n','\n')
             else:
                 out = 'API OFFLINE'
-            return out
+            return str(out)
         else:
             return 'MORE!'

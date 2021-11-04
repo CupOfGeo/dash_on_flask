@@ -70,11 +70,11 @@ def register_blueprints(server):
     from app.webapp2 import google_bp
     from app.webapp import server_bp
     from app.stripe_payment import stripe_bp, stripe_prefix
-    from app.https import https_bp
+
 
     server.register_blueprint(server_bp, url_prefix="/account")
     server.register_blueprint(google_bp, url_prefix="/google_login")
     server.register_blueprint(stripe_bp, url_prefix=stripe_prefix)
-    server.register_blueprint(https_bp,url_prefix='/.well-known/acme-challenge/RWBgegO40X1gX7d131JRyYFnmGM2xSeXD3j5Nl2zhw4')
+
 
 

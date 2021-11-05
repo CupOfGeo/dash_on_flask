@@ -302,7 +302,7 @@ def register_callbacks(dashapp):
         if RAPPER_API:
             data = {'text': prompt, 'max_tokens': length, 'temp': temp}
             data_json = json.dumps(data)
-            r = requests.get(RAPPER_API, data=data_json)
+            r = requests.post(RAPPER_API, data=data_json)
             if r.status_code == 200:
                 out = r.json()['out']
                 out = out.replace('\\n','\n')

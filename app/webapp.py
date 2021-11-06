@@ -17,7 +17,8 @@ from app.models import User
 server_bp = Blueprint('main', __name__)
 
 def is_logged_in():
-    return current_user.is_authenticated
+    if current_user:
+        return current_user.is_authenticated
 
 
 

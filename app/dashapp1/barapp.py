@@ -41,7 +41,7 @@ nav_bar = """
 </nav>
 """
 
-if is_logged_in:
+if is_logged_in == True:
     nav_bar = """
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
@@ -76,6 +76,8 @@ if is_logged_in:
 </nav>
 """
 
+
+print("ARE YOU LOGED ING?", is_logged_in())
 # TODO Make new raw_outputs.txt
 # raw_outputs = []
 # with open('raw_outputs.txt', 'r') as file:

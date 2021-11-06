@@ -41,7 +41,7 @@ nav_bar = """
 </nav>
 """
 
-if is_logged_in == True:
+if is_logged_in():
     nav_bar = """
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container-fluid">
@@ -75,17 +75,6 @@ if is_logged_in == True:
   </div>
 </nav>
 """
-
-
-print("ARE YOU LOGED ING?", is_logged_in())
-# TODO Make new raw_outputs.txt
-# raw_outputs = []
-# with open('raw_outputs.txt', 'r') as file:
-#     lines = file.readlines()
-# for line in lines:
-#     if line != '':
-#         raw_outputs.append(line)
-
 
 index_string_top = '''
 <!DOCTYPE html>
@@ -125,6 +114,7 @@ index_string_bot = '''
 </html>
 '''
 index_string = index_string_top + nav_bar + index_string_bot
+
 # app = dash.Dash(__name__, suppress_callback_exceptions=True)
 
 
@@ -182,7 +172,7 @@ layout = html.Div([
             step=10,
             marks={
                 10: {'label': '10', 'style': {'color': '#77b0b1', 'font-size': 'smaller'}},
-                110: {'label': 'Length', 'style': {'font-size': 'smaller'}},
+                110: {'label': 'Output Length', 'style': {'font-size': 'smaller'}},
                 210: {'label': '210', 'style': {'color': '#f50', 'font-size': 'smaller', 'white-space': 'nowrap'}}
             },
             included=False
@@ -196,7 +186,7 @@ layout = html.Div([
             step=0.1,
             marks={
                 0.5: {'label': 'Cold 0.5', 'style': {'color': '#77b0b1', 'font-size': 'smaller'}},
-                1: {'label': 'Temp', 'style': {'font-size': 'smaller'}},
+                1: {'label': 'Spice', 'style': {'font-size': 'smaller'}},
                 1.5: {'label': 'Hot 1.5', 'style': {'color': '#f50', 'font-size': 'smaller', 'white-space': 'nowrap'}}
             },
             included=False

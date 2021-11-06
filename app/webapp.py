@@ -17,7 +17,8 @@ from app.models import User
 server_bp = Blueprint('main', __name__)
 
 def is_logged_in():
-    if current_user:
+    if current_user and current_user.is_authenticated:
+        print('USER', current_user.username)
         return current_user.is_authenticated
 
 
@@ -26,6 +27,10 @@ def is_logged_in():
 def index():
     return render_template("index.html", title='Home Page')
 
+
+@server_bp.route('/swipe/')
+def swipe():
+    return render_template("swipe.html")
 
 @server_bp.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -71,3 +76,5 @@ def register():
         return redirect(url_for('main.login'))
 
     return render_template('register.html', title='Register', form=form)
+
+

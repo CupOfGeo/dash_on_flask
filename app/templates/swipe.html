@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script src="{{url_for('static', filename='swipe.js')}}"></script>
+<div id="touchsurface2">
+    <div id=inner class="d-grid gap-2">
+        <button id=big_button class="btn btn-lg btn-primary" type="button">Block button</button>
+    </div>
+</div>
+{% endblock %}

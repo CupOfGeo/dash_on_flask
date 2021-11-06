@@ -2,9 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17813b57-ee5b-4309-be23-54a6f2b1356e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app/dashapp1/CustomDash.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/dashapp1/assets/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/static/swipe.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/swipe.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/assets/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/dashapp1/assets/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/assets/check_mobile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/dashapp1/barapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/barapp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/stripe.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/stripe.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/webapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/webapp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dashapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/dashapp.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,21 +49,23 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/dashapp1/assets" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/dashapp1/assets" />
+      <recent name="$PROJECT_DIR$/app/static" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/app" />
       <recent name="$PROJECT_DIR$/app/dashapp1" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/static" />
+      <recent name="$PROJECT_DIR$/app/dashapp1" />
       <recent name="$PROJECT_DIR$/app" />
       <recent name="$PROJECT_DIR$/static" />
       <recent name="$PROJECT_DIR$/app/dashapp1/assets" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/app/assets" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

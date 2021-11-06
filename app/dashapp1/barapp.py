@@ -24,7 +24,7 @@ nav_bar = """
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Train Your Own</a>
+          <a class="nav-link" href="/stripe">Train Your Own</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">About</a>
@@ -57,7 +57,7 @@ if is_logged_in:
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Train Your Own</a>
+          <a class="nav-link" href="/stripe">Train Your Own</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">About</a>

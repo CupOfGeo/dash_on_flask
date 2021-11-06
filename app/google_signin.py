@@ -8,11 +8,7 @@ from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
 from oauthlib.oauth2 import TokenExpiredError
-from werkzeug.urls import url_parse
 
-from app.extensions import db
-from app.forms import LoginForm
-from app.forms import RegistrationForm
 from app.models import User
 
 from flask_dance.contrib.google import make_google_blueprint, google

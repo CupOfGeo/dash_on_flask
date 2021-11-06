@@ -67,7 +67,7 @@ def register_extensions(server):
 
 
 def register_blueprints(server):
-    from app.webapp2 import google_bp
+    from app.google_signin import google_bp
     from app.webapp import server_bp
     from app.stripe_payment import stripe_bp, stripe_prefix
 

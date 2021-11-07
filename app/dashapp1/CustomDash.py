@@ -48,7 +48,7 @@ class CustomDash(dash.Dash):
         </nav>
         """
 
-        if is_logged_in():
+        if is_logged_in() != None:
             nav_bar = """
             <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
           <div class="container-fluid">

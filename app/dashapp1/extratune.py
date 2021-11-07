@@ -1,23 +1,41 @@
 import dash_bootstrap_components as dbc
 from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output, State, MATCH, ALL, ClientsideFunction
+from dash import html, callback_context
+from dash.dependencies import Input, Output, State, ClientsideFunction
 
 import json
 import requests
 import os
-import base64
+from ..webapp import is_logged_in
+from .bucket import write_file_blob
 
-# Generate more button
-# more More More! More!! MORE MORE! MORE!!! MMOORREE!!! MOOOORRREEE!
-gen_button = dbc.Button(
-    id='gen-button',
-    children='more',
-    style={'margin-top': '1%', 'width': '80%', 'height': '2%', 'line-height': '200%', 'font-size': '300%'}
+
+
+good_button = dbc.Button(
+    id='good-button',
+    children='good',
+    className='btn btn-success',
+    style={'margin-top': '1%', 'width': '40%', 'height': '2%', 'line-height': '100%', 'font-size': '200%'}
 )
 
+bad_button = dbc.Button(
+    id='bad-button',
+    children='bad',
+    className="btn btn-danger",
+    style={'margin-top': '1%', 'width': '40%', 'height': '2%', 'line-height': '100%', 'font-size': '200%'}
+)
+
+back_button = dbc.Button(
+    id='back-button',
+    children='back',
+    className="btn btn-warning",
+    style={'margin-top': '1%', 'width': '40%', 'height': '2%', 'line-height': '100%', 'font-size': '200%'}
+)
+
+
+
 # The app layout
-layout = html.Div([
+tune_layout = html.Div([
     # title
     # html.H1("Synthetic Bars", style={'text-align': 'center', }),
     html.Div(
@@ -47,10 +65,12 @@ layout = html.Div([
                  # GEN MORE
                  html.Div(id='dynamic-button-container',
                           children=[
-                              gen_button
+                              good_button,
+                              bad_button,
+                              #back_button
                           ]),
 
-             ], style={'text-align': 'center'}),
+             ], style={'text-align': 'center', 'margin-bottom': '10%'}),
 
     # Sliders get styled based on isMobile
     html.Div(id='sliders-div', children=[
@@ -62,7 +82,7 @@ layout = html.Div([
             step=10,
             marks={
                 10: {'label': '10', 'style': {'color': '#77b0b1', 'font-size': 'smaller'}},
-                110: {'label': 'Output Length', 'style': {'font-size': 'smaller'}},
+                110: {'label': 'Length', 'style': {'font-size': 'smaller'}},
                 210: {'label': '210', 'style': {'color': '#f50', 'font-size': 'smaller', 'white-space': 'nowrap'}}
             },
             included=False
@@ -91,7 +111,7 @@ layout = html.Div([
 ])
 
 
-def register_callbacks(dashapp):
+def tune_register_callbacks(dashapp):
     dashapp.clientside_callback(
         """
             function(label) {          
@@ -115,19 +135,20 @@ def register_callbacks(dashapp):
 
     # IsMobile styling
     @dashapp.callback(Output('sliders-div', 'style'),
-                      [Input('div-mobile', 'children')], )
-    def style_mobile(is_mobile):
+                      Output('main-textarea', 'style'),
+                      [Input('div-mobile', 'children')],
+                      State('slider-div', 'style'),
+                      State('main-textarea', 'style'))
+    def style_mobile(is_mobile, slider_style, text_style):
         print("IS MOBILE:", is_mobile)
+        # if mobile overwrite style
         if is_mobile:
-            rows = '20'
-            style = {'transform': 'scale(2.5)', 'display': 'block', 'margin-top': '15%', 'margin-left': 'auto',
-                     'margin-right': 'auto', 'width': '40%'}
-        else:
-            rows = '10'
-            style = {'transform': 'scale(2)', 'display': 'block', 'margin-top': '5%', 'margin-left': 'auto',
-                     'margin-right': 'auto', 'width': '45%'}
-        # return rows, style
-        return style
+            slider_style['transform'] = 'scale(2.5)'
+            slider_style['width'] = '40%'
+
+            text_style['font-size'] = '150%'
+
+        return slider_style, text_style
 
     @dashapp.callback(
         [Output('dynamic-button-container', 'children'),
@@ -135,54 +156,76 @@ def register_callbacks(dashapp):
          Output("main-textarea", "rows"),
          Output("loading-output", "children"),
          Output('session', 'data')],
-        Input('gen-button', 'n_clicks'),
+        Input('good-button', 'n_clicks'),
+        Input('bad-button', 'n_clicks'),
         [State('dynamic-button-container', 'children'),
          State("main-textarea", 'value'),
          State('temp-slider', 'value'),
          State('length-slider', 'value'),
          State('session', 'data')])
-    def display_newbutton(n_clicks, children, textarea, temp, max_tokens, store_data):
+    def display_newbutton(n_clicks_good, n_clicks_bad, children, textarea, temperature, max_tokens, store_data):
         # on page load
-        print("TYPE:", type(max_tokens))
 
-        if n_clicks is None:
-            return children, textarea, '2', '', {'clicks': 0}
-        else:
-            store_data['clicks'] += 1
 
-            # TODO generate a bunch of fake songs for raw_outputs.txt
+        if n_clicks_good is None and n_clicks_bad is None:
+            # initial load in text?
             if textarea == '':
-                # out = random.choice(raw_outputs)
                 textarea = '[Verse 1:'
 
-            out = generate_out(textarea, temp, max_tokens)
+            out = generate_out(textarea, temperature, max_tokens)
 
-            children.pop()
-            more = ['More', 'More!', 'More!!', 'MORE!!!', 'MMOORREE!!!', 'MOOOORRREEE!!!!!!!']
+            # children = [good_button, bad_button]
+            # print('Generating a new button')
+            rows = out.count('\n')
+            rows = rows + 1
 
-            gen_button.children = more[store_data['clicks'] % len(more)]
-            children.append(gen_button)
+            return children, out, rows, '', {'clicks': 0}
+        else:
+            # will use to keep count of swipes
+
+            store_data['clicks'] += 1
+            changed_id = [p['prop_id'] for p in callback_context.triggered][0]
+            if 'good' in changed_id:
+                which_button = 'good'
+                # TODO save textarea to Bucket as file
+                user = is_logged_in()
+
+                textarea = textarea.replace('\n', '\\n')
+                textarea += '\n'
+                write_file_blob('central-bucket-george', user, textarea)
+            # elif 'bad' in changed_id:
+            #     which_button = 'bad'
+            #     # TODO re-roll /reject bad
+
+            textarea = '[Verse 1:'
+
+            out = generate_out(textarea, temperature, max_tokens)
+
+            children = [good_button, bad_button]
             # print('Generating a new button')
             rows = out.count('\n')
             rows = rows + 1
             return children, out, str(rows), '', store_data
 
+    # Disable the button while it loads
     @dashapp.callback(
-        Output('gen-button', 'disabled'),
-        [Input('gen-button', 'n_clicks')]
+        Output('good-button', 'disabled'),
+        Output('bad-button', 'disabled'),
+        [Input('good-button', 'n_clicks'),
+         Input('bad-button', 'n_clicks')]
     )
-    def hide_newbutton(n_clicks):
+    def hide_newbutton(n_clicks, n_clicks_2):
+        # i think this is on load none != 0 so no need to add n_clicks_2
         if n_clicks is None:
-            return False
+            return False, False
         else:
-            print('Disabling the button')
-            return True
+            return True, True
 
-    def generate_out(prompt, temp, length):
+    def generate_out(prompt, temperature, length):
         RAPPER_API = os.getenv('API_URL')
 
         if RAPPER_API:
-            data = {'text': prompt, 'max_tokens': length, 'temp': temp}
+            data = {'text': prompt, 'max_tokens': length, 'temp': temperature}
             data_json = json.dumps(data)
             r = requests.post(RAPPER_API, data=data_json)
             if r.status_code == 200:

@@ -21,7 +21,8 @@ def create_app():
 
 
 def register_dashapps(app):
-    from app.dashapp1.barapp import layout, register_callbacks, index_string
+    from app.dashapp1.barapp import layout, register_callbacks
+    from app.dashapp1.extratune import tune_layout, tune_register_callbacks
     from app.dashapp1.CustomDash import CustomDash
 
     # Meta tags for viewport responsiveness
@@ -36,13 +37,25 @@ def register_dashapps(app):
                           meta_tags=[meta_viewport], external_stylesheets=[dbc.themes.LUX],
                           )
 
-    print('HERE?:', get_root_path(__name__) + '/dashapp1/assets/')
+    extratune = CustomDash(__name__,
+                          server=app,
+                          url_base_pathname='/tune/',
+                          assets_folder=get_root_path(__name__) + '/dashapp1/assets/',
+                          meta_tags=[meta_viewport], external_stylesheets=[dbc.themes.LUX],
+                          )
+
+
     with app.app_context():
         dashapp1.title = 'Synthetic bars'
         dashapp1.layout = layout
         register_callbacks(dashapp1)
 
-    # _protect_dashviews(dashapp1)
+        extratune.title = 'Tune'
+        extratune.layout = tune_layout
+        tune_register_callbacks(extratune)
+
+    # must be logged in to access
+    _protect_dashviews(extratune)
 
 
 def _protect_dashviews(dashapp):

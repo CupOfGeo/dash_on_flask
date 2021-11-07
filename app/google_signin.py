@@ -19,11 +19,13 @@ def index():
     try:
         resp = google.get("/oauth2/v1/userinfo")
         assert resp.ok, resp.text
-        user = User(username=resp.json()["email"])
-        db.session.add(user)
-        db.session.commit()
-
-        login_user(user)
+        user = User.query.filter_by(username=resp.json()["email"]).first()
+        if user == None:
+            user = User(username=resp.json()["email"])
+            db.session.add(user)
+            db.session.commit()
+        else:
+            login_user(user)
 
     except TokenExpiredError as e:
         return redirect(url_for("google.login"))

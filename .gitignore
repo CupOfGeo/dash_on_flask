@@ -1,6 +1,6 @@
 #
 venv/
-
+google_key.json
 # Cache
 __pycache__
 

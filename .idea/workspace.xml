@@ -2,7 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17813b57-ee5b-4309-be23-54a6f2b1356e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/google_signin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/google_signin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/stripe_payment.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/stripe_payment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/cancel.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/cancel.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/success.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/success.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/webapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/webapp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/README" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/alembic.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/env.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/script.py.mako" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/versions/8e9c46887a13_init.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

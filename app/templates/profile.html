@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+{% if current_user.is_anonymous %}
+  <h1>Hey your not allowed back here stranger!</h1>
+{% else  %}
+  <h1>Hi, {{ current_user.username }}! you have {{models_allowed}} {{models_in_use}}</h1>
+
+<!--if the user has a model_in_use let them use and tune-->
+<!--TODO it should just be tune not links but drops downs and stuff-->
+<!--if they have a (model allowed - in_use) >= 1 let them create a dataset and tune-->
+<!--{% if products[id].in_use %} this stuff {% endif %}-->
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Model</th>
+      <th scope="col">Dataset</th>
+      <th scope="col">Use</th>
+      <th scope="col">Tune</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for id in range(models_allowed) %}
+    {% if models[id].in_use %}
+    <tr class="table-success">
+      {% else  %}
+      <tr class="table-primary">
+      {% endif %}
+
+      <th scope="row">{{ models[id].name }}</th>
+      <td>{{ models[id].dataset_name }}</td>
+      <td>
+          <form method="POST" action="/{{current_user.username}}/{{model_name}}/tune">
+            <input type="submit" value="Tune">
+          </form>
+      </td>
+      <td>
+          <form method="POST" action="/{{current_user.username}}/{{model_name}}/use">
+            <input type="submit" value="Use">
+          </form>
+      </td>
+      <td>DELETE</td>
+    </tr>
+    {% endfor %}
+
+    <tr class="table-secondary">
+      <th scope="row">New Model</th>
+      <td>CLICK FOR NEW MODEL</td>
+    </tr>
+  </tbody>
+</table>
+
+{% endif %}
+{% endblock %}

@@ -18,6 +18,7 @@ gen_button = dbc.Button(
 
 # The app layout
 layout = html.Div([
+    dcc.Location(id='url', refresh=False),
     # title
     # html.H1("Synthetic Bars", style={'text-align': 'center', }),
     html.Div(
@@ -140,10 +141,10 @@ def register_callbacks(dashapp):
          State("main-textarea", 'value'),
          State('temp-slider', 'value'),
          State('length-slider', 'value'),
-         State('session', 'data')])
-    def display_newbutton(n_clicks, children, textarea, temp, max_tokens, store_data):
+         State('session', 'data'),
+         State('url', 'pathname')])
+    def display_newbutton(n_clicks, children, textarea, temp, max_tokens, store_data, pathname):
         # on page load
-        print("TYPE:", type(max_tokens))
 
         if n_clicks is None:
             return children, textarea, '2', '', {'clicks': 0}
@@ -155,7 +156,7 @@ def register_callbacks(dashapp):
                 # out = random.choice(raw_outputs)
                 textarea = '[Verse 1:'
 
-            out = generate_out(textarea, temp, max_tokens)
+            out = generate_out(textarea, temp, max_tokens, pathname)
 
             children.pop()
             more = ['More', 'More!', 'More!!', 'MORE!!!', 'MMOORREE!!!', 'MOOOORRREEE!!!!!!!']
@@ -178,8 +179,17 @@ def register_callbacks(dashapp):
             print('Disabling the button')
             return True
 
-    def generate_out(prompt, temp, length):
+    def generate_out(prompt, temp, length, who):
+
         RAPPER_API = os.getenv('API_URL')
+        if who == '/rapper':
+            RAPPER_API = RAPPER_API + who
+
+        elif who == '/Cowboy':
+            RAPPER_API = RAPPER_API + '/cowboy'
+
+        else:
+            RAPPER_API = RAPPER_API + '/rapper'
 
         if RAPPER_API:
             data = {'text': prompt, 'max_tokens': length, 'temp': temp}

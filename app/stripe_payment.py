@@ -6,7 +6,7 @@ from flask import abort, jsonify, request
 from flask_login import current_user
 from flask_login import login_required
 
-from app.models import User
+from app.models import User, load_user
 from app.extensions import db
 
 import os
@@ -33,7 +33,15 @@ products = {
 
 @stripe_bp.route('/')
 def index():
-    return render_template('stripe.html', products=products, stripe_prefix=stripe_prefix)
+    if current_user.is_authenticated:
+
+        user = load_user(current_user.get_id())
+        allowed = user.models_allowed
+        return render_template('stripe.html', username=str(user), allowed=allowed, products=products,
+                               stripe_prefix=stripe_prefix)
+    else:
+        return render_template('stripe.html', products=products,stripe_prefix=stripe_prefix)
+
 
 
 @stripe_bp.route('/order/<product_id>', methods=['POST'])
@@ -62,6 +70,8 @@ def order(product_id):
         mode='payment',
         success_url=request.host_url + stripe_prefix.replace('/', '') + '/order/success',
         cancel_url=request.host_url + stripe_prefix.replace('/', '') + '/order/cancel',
+        metadata={'userId': current_user.get_id()},
+
     )
     return redirect(checkout_session.url)
 
@@ -103,12 +113,11 @@ def webhook():
     elif event['type'] == 'checkout.session.completed':
         session = event['data']['object']
         print('🔔 Payment succeeded!')
+        user_id = session['metadata']['userId']
+        user = load_user(user_id)
+        user.inc_models_allowed()
+        db.session.commit()
 
-        # for test user doesnt exist
-        if current_user.is_authenticated:
-            user = User.query.filter_by(username=current_user.username).first()
-            user.inc_models_allowed()
-            db.session.commit()
 
         # session = stripe.checkout.Session.retrieve(
         #     event['data']['object'].id, expand=['line_items'])

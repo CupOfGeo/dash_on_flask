@@ -44,19 +44,40 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
-#
-# class Model(db.Model):
-#     owner = db.Column(db.String(128))
-#     name = db.Column(db.String(64))
-#     created = db.Column(db.DateTime)
-#     end_date = db.Column(db.DateTime)
-#
-#     # enabled?
-#
-#     def set_created_and_end_date(self):
-#         self.created = datetime.now(timezone.utc).isoformat(timespec='seconds')
-#         self.end_date = self.created + datetime.timedelta(months=1)
 
-# I need a way to track how many models a user has
-# after they pay I need to add a created and end date for the model
-# Table of Models
+class GPTModel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    owner = db.Column(db.Integer)
+    name = db.Column(db.String(64))
+    in_use = db.Column(db.Boolean)
+    created = db.Column(db.DateTime)
+    end_date = db.Column(db.DateTime)
+    dataset_name = db.Column(db.String(64))
+
+    # you pay and then get taken to a screen where you create a model dataset
+    def init_model(self, owner_id, name, dataset_name):
+        # when creating a model
+        self.name = name
+        self.owner = owner_id
+        self.dataset_name = dataset_name
+        # its in use but the time hasn't started yet start yet
+        self.enable_model()
+
+    def renew_model(self):
+        # makes sure its true
+        self.enable_model()
+
+        self.created = datetime.now(timezone.utc).isoformat(timespec='seconds')
+        self.end_date = self.created + datetime.timedelta(months=1)
+
+    def disable_model(self):
+        self.in_use = False
+
+    def enable_model(self):
+        self.in_use = True
+
+    def rename_model(self, new_name):
+        self.name = new_name
+
+    def change_dataset(self, new_dataset):
+        self.dataset_name = new_dataset

@@ -17,27 +17,6 @@ class CustomDash(dash.Dash):
         # Inspect the arguments by printing them
         # print(kwargs)
         nav_bar = """
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="#">Ghost Rhymes</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarColor01">
-              <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                  <a class="nav-link active" href="/">Rapper
-                    <span class="visually-hidden">(current)</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/stripe">Train Your Own</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">About</a>
-                </li>
-              </ul>
-
               <ul class="navbar-nav navbar-right">
                 <li class="nav-item">
                   <a class="nav-link" href="/account/login">login</a>
@@ -50,28 +29,6 @@ class CustomDash(dash.Dash):
 
         if is_logged_in() != None:
             nav_bar = """
-            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="#">Ghost Rhymes</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarColor01">
-              <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                  <a class="nav-link active" href="/">Rapper
-                    <span class="visually-hidden">(current)</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/stripe">Train Your Own</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">About</a>
-                </li>
-              </ul>
-
-
               <ul class="navbar-nav navbar-right">
                 <li class="nav-item">
                   <a class="nav-link" href="/account/logout">logout</a>
@@ -97,6 +54,31 @@ class CustomDash(dash.Dash):
 
             </head>
             <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="#">Ghost Rhymes</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor01">
+              <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                  <a class="nav-link active" href="/">Rapper
+                    <span class="visually-hidden">(current)</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="/Cowboy">Cowboy
+                    <span class="visually-hidden">(current)</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/stripe">Train Your Own</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">About</a>
+                </li>
+              </ul>
         '''
         index_string_bot = '''
                 {app_entry}

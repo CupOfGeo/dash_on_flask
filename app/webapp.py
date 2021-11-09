@@ -12,7 +12,9 @@ from werkzeug.urls import url_parse
 from app.extensions import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
+# from app.forms import RegiserModel
 from app.models import User
+# load_user, Model
 
 server_bp = Blueprint('main', __name__)
 
@@ -89,6 +91,26 @@ def register():
 
 
 # @server_bp.route('/profile/')
+# @login_required
 # def profile():
-#     return render_template('profile.html',models_in_use='0', models_allowed='0')
+#     user = load_user(current_user.get_id())
+#     models = Model.query.filter_by(user_id=user.id).first()
+#     form = RegiserModel()
+#     if form.validate_on_submit():
+#         form.username.data
+#         if user is None or not user.check_password(form.password.data):
+#             error = 'Invalid username or password'
+#             return render_template('login.html', form=form, error=error)
+#
+#         login_user(user, remember=form.remember_me.data)
+#         next_page = request.args.get('next')
+#         if not next_page or url_parse(next_page).netloc != '':
+#             next_page = url_for('main.index')
+#         return redirect(next_page)
+
+
+
+    return render_template('profile.html', models=models,
+                           models_in_use=user.models_in_use, models_allowed=user.models_allowed,
+                           form=form)
 

@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Stripe and Flask Demo</h1>
+    {% if current_user.is_anonymous %}
+      <h1>Must log in to purchase</h1>
+    {% else  %}
+      <h1>Hi, {{ current_user.username }}! you have {{allowed}} models available</h1>
+    {% endif %}
+    <h2>please don't buy anything yet you will be charged still in testing<h2>
     <table>
       <tr>
         <th>Product</th>

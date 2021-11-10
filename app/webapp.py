@@ -3,6 +3,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import flash
 from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
@@ -12,41 +13,44 @@ from werkzeug.urls import url_parse
 from app.extensions import db
 from app.forms import LoginForm
 from app.forms import RegistrationForm
-# from app.forms import RegiserModel
-from app.models import User
-# load_user, Model
+from app.forms import DeleteModel, RegisterModel
+from app.models import User, GPTModel, load_user
+
 
 server_bp = Blueprint('main', __name__)
 
-'''
-checks if a user is logged in
-if there is a user logged in return there username
-else return None
-'''
-def is_logged_in():
+
+def get_user():
+    """
+    checks if a user is logged in
+    if there is a user logged in return there username
+    else return None
+    """
     if current_user and current_user.is_authenticated:
-        print('USER', current_user.username)
-        return current_user.username
+        user = load_user(current_user.get_id())
+        return user
     else:
         return None
 
-
-# def get_user():
 
 
 
 
 @server_bp.route('/')
 def index():
+    """/account index page TODO make this profile?"""
     return render_template("index.html", title='Home Page')
 
 
 @server_bp.route('/swipe/')
 def swipe():
+    """TODO Swipe functionality like tinder"""
     return render_template("swipe.html")
+
 
 @server_bp.route('/login/', methods=['GET', 'POST'])
 def login():
+    """login page TODO remove this and replace with just google sign in"""
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
 
@@ -75,6 +79,7 @@ def logout():
 
 @server_bp.route('/register/', methods=['GET', 'POST'])
 def register():
+    """register a user but honestly I don't want to do this would rather have people just sign in with google"""
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
 
@@ -88,29 +93,4 @@ def register():
         return redirect(url_for('main.login'))
 
     return render_template('register.html', title='Register', form=form)
-
-
-# @server_bp.route('/profile/')
-# @login_required
-# def profile():
-#     user = load_user(current_user.get_id())
-#     models = Model.query.filter_by(user_id=user.id).first()
-#     form = RegiserModel()
-#     if form.validate_on_submit():
-#         form.username.data
-#         if user is None or not user.check_password(form.password.data):
-#             error = 'Invalid username or password'
-#             return render_template('login.html', form=form, error=error)
-#
-#         login_user(user, remember=form.remember_me.data)
-#         next_page = request.args.get('next')
-#         if not next_page or url_parse(next_page).netloc != '':
-#             next_page = url_for('main.index')
-#         return redirect(next_page)
-
-
-
-    return render_template('profile.html', models=models,
-                           models_in_use=user.models_in_use, models_allowed=user.models_allowed,
-                           form=form)
 

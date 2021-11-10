@@ -2,14 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17813b57-ee5b-4309-be23-54a6f2b1356e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/templates/profile.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/dashapp1/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/dashapp1/profile.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/dashapp1/spotify_genius.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/versions/947dc1d19f9e_.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/versions/b695c2235fac_.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/versions/c4e07372a7e5_.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/dashapp1/CustomDash.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/CustomDash.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashapp1/barapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/barapp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/dashapp1/extratune.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/extratune.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/stripe_payment.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/stripe_payment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/stripe.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/stripe.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/webapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/webapp.py" afterDir="false" />
     </list>
@@ -66,9 +72,9 @@
       <recent name="$PROJECT_DIR$/app" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/dashapp1" />
       <recent name="$PROJECT_DIR$/venv" />
       <recent name="$PROJECT_DIR$/app/static" />
-      <recent name="$PROJECT_DIR$/app/dashapp1" />
       <recent name="$PROJECT_DIR$/app" />
       <recent name="$PROJECT_DIR$/static" />
     </key>

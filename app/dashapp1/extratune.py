@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output, State, ClientsideFunction
 import json
 import requests
 import os
-from ..webapp import is_logged_in
+from ..webapp import get_user
 from .bucket import write_file_blob
 
 
@@ -188,11 +188,11 @@ def tune_register_callbacks(dashapp):
             if 'good' in changed_id:
                 which_button = 'good'
                 # TODO save textarea to Bucket as file
-                user = is_logged_in()
+                user = get_user()
 
                 textarea = textarea.replace('\n', '\\n')
                 textarea += '\n'
-                write_file_blob('central-bucket-george', user, textarea)
+                write_file_blob('central-bucket-george', str(user), textarea)
             # elif 'bad' in changed_id:
             #     which_button = 'bad'
             #     # TODO re-roll /reject bad

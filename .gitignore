@@ -2,6 +2,7 @@
 venv/
 google_key.json
 .idea/
+.cache
 # Cache
 __pycache__
 

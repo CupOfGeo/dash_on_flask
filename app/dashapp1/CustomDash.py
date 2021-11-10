@@ -8,7 +8,8 @@ import json
 import requests
 import os
 import base64
-from ..webapp import is_logged_in
+from app.models import User
+from ..webapp import get_user
 
 
 
@@ -27,7 +28,7 @@ class CustomDash(dash.Dash):
         </nav>
         """
 
-        if is_logged_in() != None:
+        if get_user() != None:
             nav_bar = """
               <ul class="navbar-nav navbar-right">
                 <li class="nav-item">

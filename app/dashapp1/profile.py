@@ -1,9 +1,13 @@
 import dash_bootstrap_components as dbc
 from dash import html, callback_context
 from dash.dependencies import Input, Output, State, MATCH, ALL
-import json
-import re
 
+
+import re
+import json
+import requests
+
+import os
 from app.models import get_models
 
 from app.dashapp1.spotify_genius import get_playlist_name
@@ -59,6 +63,24 @@ def dataset_url_valid(dataset_url):
     return ''
 
 
+# async def spotify_2_genius(user, playlist_id):
+#     URL = os.environ["SPOTIFY_2_GENIUS"]
+#     # URL = 'http://127.0.0.1:5000/'
+#     # western cowboy 73 songs
+#     data = {'user': user, 'playlist_id': playlist_id, 'debug': True}
+#
+#     # 1003 song playlist https://open.spotify.com/playlist/7hDSJxfgDFNImclVNOaaEl
+#     # data = {'user':'george', 'playlist_id':'7hDSJxfgDFNImclVNOaaEl', 'debug': True}
+#
+#     data_json = json.dumps(data)
+#     r = requests.post(URL, data=data_json)
+#     if r.status_code == 200:
+#         out = r.json()['found_songs']
+#         print(out)
+#     else:
+#         print("ERROR")
+
+
 def profile_register_callbacks(dashapp):
     # TODO change title n_clicks
     @dashapp.callback(Output('title', 'children'),
@@ -101,6 +123,9 @@ def profile_register_callbacks(dashapp):
 
                 # make new model
                 user.make_model(model_name, playlist_id)
+
+                # create dataset
+                #spotify_2_genius(user, playlist_id)
             else:
                 # TODO show error
                 '''

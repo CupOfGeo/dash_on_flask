@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output, State, ClientsideFunction
 import json
 import requests
 import os
-from ..webapp import get_user
+from app.webapp import get_user
 from .bucket import write_file_blob
 
 
@@ -38,6 +38,7 @@ back_button = dbc.Button(
 tune_layout = html.Div([
     # title
     # html.H1("Synthetic Bars", style={'text-align': 'center', }),
+    dcc.Location(id='url'),
     html.Div(
         [
             # Main Text
@@ -162,7 +163,8 @@ def tune_register_callbacks(dashapp):
          State("main-textarea", 'value'),
          State('temp-slider', 'value'),
          State('length-slider', 'value'),
-         State('session', 'data')])
+         State('session', 'data'),
+         State('url', 'pathname')])
     def display_newbutton(n_clicks_good, n_clicks_bad, children, textarea, temperature, max_tokens, store_data):
         # on page load
 
@@ -221,7 +223,7 @@ def tune_register_callbacks(dashapp):
         else:
             return True, True
 
-    def generate_out(prompt, temperature, length):
+    def generate_out(prompt, temperature, length, who):
         RAPPER_API = os.getenv('API_URL')
 
         if RAPPER_API:

@@ -1,4 +1,3 @@
-import dash
 from flask import Flask
 from flask.helpers import get_root_path
 from flask_login import login_required
@@ -31,12 +30,12 @@ def register_dashapps(app):
         "name": "viewport",
         "content": "width=device-width, initial-scale=1, shrink-to-fit=yes"}
 
-    dashapp1 = CustomDash(__name__,
-                          server=app,
-                          url_base_pathname='/',
-                          assets_folder=get_root_path(__name__) + '/dashapp1/assets/',
-                          meta_tags=[meta_viewport], external_stylesheets=[dbc.themes.LUX],
-                          )
+    barapp = CustomDash(__name__,
+                        server=app,
+                        url_base_pathname='/',
+                        assets_folder=get_root_path(__name__) + '/dashapp1/assets/',
+                        meta_tags=[meta_viewport], external_stylesheets=[dbc.themes.LUX],
+                        )
 
     extratune = CustomDash(__name__,
                            server=app,
@@ -53,9 +52,9 @@ def register_dashapps(app):
                          )
 
     with app.app_context():
-        dashapp1.title = 'Synthetic bars'
-        dashapp1.layout = layout
-        register_callbacks(dashapp1)
+        barapp.title = 'Synthetic bars'
+        barapp.layout = layout
+        register_callbacks(barapp)
 
         extratune.title = 'Tune'
         extratune.layout = tune_layout

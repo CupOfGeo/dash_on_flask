@@ -11,3 +11,4 @@ def get_playlist_name(playlist_id):
     results = sp.playlist(pl_id)
     playlist_name = results['name']
     return playlist_name
+

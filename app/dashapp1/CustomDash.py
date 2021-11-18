@@ -9,7 +9,7 @@ import requests
 import os
 import base64
 from app.models import User
-from ..webapp import get_user
+from app.webapp import get_user
 
 
 

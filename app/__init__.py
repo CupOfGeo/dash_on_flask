@@ -22,7 +22,7 @@ def create_app():
 def register_dashapps(app):
     from app.dashapp1.barapp import layout, register_callbacks
     from app.dashapp1.extratune import tune_layout, tune_register_callbacks
-    from app.dashapp1.profile import profile_layout, profile_register_callbacks
+    # from app.dashapp1.profile import profile_layout, profile_register_callbacks
     from app.dashapp1.CustomDash import CustomDash
 
     # Meta tags for viewport responsiveness
@@ -44,12 +44,12 @@ def register_dashapps(app):
                            meta_tags=[meta_viewport], external_stylesheets=[dbc.themes.LUX],
                            )
 
-    profile = CustomDash(__name__,
-                         server=app,
-                         url_base_pathname='/profile/',
-                         assets_folder=get_root_path(__name__) + '/dashapp1/assets/',
-                         meta_tags=[meta_viewport], external_stylesheets=[dbc.themes.LUX],
-                         )
+    # profile = CustomDash(__name__,
+    #                      server=app,
+    #                      url_base_pathname='/profile/',
+    #                      assets_folder=get_root_path(__name__) + '/dashapp1/assets/',
+    #                      meta_tags=[meta_viewport], external_stylesheets=[dbc.themes.LUX],
+    #                      )
 
     with app.app_context():
         barapp.title = 'Synthetic bars'
@@ -60,13 +60,13 @@ def register_dashapps(app):
         extratune.layout = tune_layout
         tune_register_callbacks(extratune)
 
-        profile.title = 'USERNAME Profile'
-        profile.layout = profile_layout
-        profile_register_callbacks(profile)
+        # profile.title = 'USERNAME Profile'
+        # profile.layout = profile_layout
+        # profile_register_callbacks(profile)
 
     # must be logged in to access
     _protect_dashviews(extratune)
-    _protect_dashviews(profile)
+    # _protect_dashviews(profile)
 
 
 def _protect_dashviews(dashapp):

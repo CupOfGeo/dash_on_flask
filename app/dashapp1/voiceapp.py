@@ -1,3 +1,5 @@
+import io
+
 import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
@@ -8,6 +10,9 @@ import requests
 import os
 import base64
 
+#DIS IS ME HAHA
+import uberduckapi as ud
+
 # Generate more button
 # more More More! More!! MORE MORE! MORE!!! MMOORREE!!! MOOOORRREEE!
 gen_button = dbc.Button(
@@ -17,7 +22,7 @@ gen_button = dbc.Button(
 )
 
 # The app layout
-layout = html.Div([
+voice_layout = html.Div([
     dcc.Location(id='url', refresh=False),
     # title
     # html.H1("Synthetic Bars", style={'text-align': 'center', }),
@@ -52,6 +57,14 @@ layout = html.Div([
                           ]),
 
              ], style={'text-align': 'center'}),
+
+    dbc.Button(
+        id='voice-button',
+        children='TO_VOICE',
+        style={'margin-top': '1%', 'width': '80%', 'height': '2%', 'line-height': '200%', 'font-size': '300%'}
+    ),
+    html.Div(id='audio_holder', children=[]),
+
 
     # Sliders get styled based on isMobile
     html.Div(id='sliders-div', children=[
@@ -92,7 +105,7 @@ layout = html.Div([
 ])
 
 
-def register_callbacks(dashapp):
+def voice_register_callbacks(dashapp):
     dashapp.clientside_callback(
         """
             function(label) {          
@@ -151,7 +164,10 @@ def register_callbacks(dashapp):
         else:
             store_data['clicks'] += 1
 
-
+            # TODO generate a bunch of fake songs for raw_outputs.txt
+            if textarea == '':
+                # out = random.choice(raw_outputs)
+                textarea = '[Verse 1:'
 
             out = generate_out(textarea, temp, max_tokens, pathname)
 
@@ -177,26 +193,20 @@ def register_callbacks(dashapp):
             return True
 
     def generate_out(prompt, temp, length, who):
-        # TODO generate a bunch of fake songs for raw_outputs.txt
-        if prompt == '':
-            # out = random.choice(raw_outputs)
-            prompt = '[Verse 1:'
 
         RAPPER_API = os.getenv('API_URL')
-        if who == '/rapper':
-            RAPPER_API = RAPPER_API + who
-
-        elif who == '/Cowboy':
-            RAPPER_API = RAPPER_API + '/cowboy'
-
-        elif who == '/RickMorty':
-            RAPPER_API = RAPPER_API + '/rick'
-            print(prompt)
-            if prompt == '[Verse 1:':
-                prompt = 'Rick: '
-
-        else:
-            RAPPER_API = RAPPER_API + '/rapper'
+        # if who == '/rapper':
+        #     RAPPER_API = RAPPER_API + who
+        #
+        # elif who == '/Cowboy':
+        #     RAPPER_API = RAPPER_API + '/cowboy'
+        #
+        # elif who == '/RickMorty':
+        #     RAPPER_API = RAPPER_API + '/rick'
+        #
+        # else:
+        #     RAPPER_API = RAPPER_API + '/rapper'
+        RAPPER_API = RAPPER_API + '/rick'
 
         if RAPPER_API:
             data = {'text': prompt, 'max_tokens': length, 'temp': temp}
@@ -210,3 +220,32 @@ def register_callbacks(dashapp):
             return str(out)
         else:
             return 'MORE!'
+
+    # I want to output a list of buttons that you can pick which to save.
+    @dashapp.callback(
+        Output('audio_holder', 'children'),
+        Input('voice-button', 'n_clicks'),
+        State("main-textarea", 'value'),
+    )
+    def voice_turn_to_voice(n_clicks, text):
+        if n_clicks is None:
+            return []
+
+        # install uberduckapi HAHA
+        my_duck = ud.UberDuck(os.environ['UBERDUCK_Key'], os.environ['UBERDUCK_Secret'])
+        # rick = my_duck.get_voice('rick-sanchez', "Hey everyone I'm alive")
+        lines = text.split('\n')
+        for line in lines:
+            if 'Rick:' in line:
+                print(line)
+
+                # ud.download_result(rick, 'temp.wav')
+                # ud.play_voice(rick)
+            elif 'Morty: ' in line:
+                print(line)
+            else:
+                pass
+
+        rick = my_duck.get_voice('rick-sanchez', "It's me Rick")
+
+        return [html.Audio(src=rick.uuid, controls=True)]

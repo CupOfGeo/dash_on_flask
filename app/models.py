@@ -54,6 +54,7 @@ class User(UserMixin, db.Model):
     def delete_model(self, model_id):
         self.dec_models_in_use()
         GPTModel.query.filter(and_(GPTModel.id == model_id, GPTModel.owner_id == self.id)).delete()
+        # TODO remove folder in the bucket?
         db.session.commit()
 
     def make_model(self, model_name, dataset_id):

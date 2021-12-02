@@ -1,7 +1,9 @@
 import dash_bootstrap_components as dbc
-from dash import html, callback_context
+from dash import html, callback_context, dcc
 from dash.dependencies import Input, Output, State, MATCH, ALL
-
+from dash.exceptions import PreventUpdate
+import threading
+import polling
 
 import re
 import json
@@ -20,6 +22,17 @@ table_header = [
 profile_layout = html.Div([
 
     html.H1(id='title'),
+    dbc.Alert(children="HI", id='alert_message', color="primary", is_open=False),
+    # cant put one component to two outputs
+    # persistence_type='session', persistence=0,
+    dcc.Input(id='job_id', value=-1, type='hidden', disabled=True),
+    dcc.Input(id='another_flag', value=0, type='hidden', disabled=True),
+    dcc.Interval(
+        id='interval-component',
+        interval=10 * 1000,  # 10 seconds in milliseconds
+        n_intervals=0,
+        disabled=True
+    ),
 
     html.Div(
         [
@@ -31,8 +44,8 @@ profile_layout = html.Div([
         ]
     ),
     dbc.Button(id='test', children='TEST'),
-    dbc.Button(id='build', children='build'),
-    html.Div(id='b')
+    html.Div(id='b'),
+
 ])
 
 
@@ -63,26 +76,50 @@ def dataset_url_valid(dataset_url):
     return ''
 
 
-# async def spotify_2_genius(user, playlist_id):
-#     URL = os.environ["SPOTIFY_2_GENIUS"]
-#     # URL = 'http://127.0.0.1:5000/'
-#     # western cowboy 73 songs
-#     data = {'user': user, 'playlist_id': playlist_id, 'debug': True}
-#
-#     # 1003 song playlist https://open.spotify.com/playlist/7hDSJxfgDFNImclVNOaaEl
-#     # data = {'user':'george', 'playlist_id':'7hDSJxfgDFNImclVNOaaEl', 'debug': True}
-#
-#     data_json = json.dumps(data)
-#     r = requests.post(URL, data=data_json)
-#     if r.status_code == 200:
-#         out = r.json()['found_songs']
-#         print(out)
-#     else:
-#         print("ERROR")
+def spotify_2_genius(user, playlist_id, model_name):
+    URL = os.environ["SPOTIFY_2_GENIUS"]
+
+    data = {'user': user.username, 'playlist_id': playlist_id, 'project_name': model_name, 'debug': True}
+
+    data_json = json.dumps(data)
+    r = requests.post(URL, data=data_json)
+    if r.status_code == 200:
+        job_id = r.json()['job_id']
+    else:
+        return -1
+
+    return job_id
 
 
 def profile_register_callbacks(dashapp):
-    # TODO change title n_clicks
+
+    @dashapp.callback(Output('alert_message', 'children'),
+                      Output('alert_message', 'is_open'),
+                      Output('another_flag', 'value'),
+                      Input('interval-component', 'n_intervals'),
+                      State('job_id', 'value'),
+                      State('another_flag', 'value'))
+    def check_dataset_status(interval, job_id, another_flag):
+        print("HIT", interval, job_id, another_flag)
+        # print("interval, job_id, another_flag")
+        if interval is None or interval == 0:
+            raise PreventUpdate
+
+        # if another_flag == 1:
+        #     # closes the alert and i wish it could also disable the interval but im just gonna accept it
+        #     return '', False, 1
+        else:
+            print("PING")
+            response = requests.post(os.environ['SPOTIFY_2_GENIUS'], data=json.dumps({'job_id': job_id}))
+            print(response.json())
+            if response.json()['status'] != 'Done':
+                return response.json()['status'], True, 1
+            else:
+                return response.json()['data'], True, 0
+
+
+
+    # TODO put this in big callback
     @dashapp.callback(Output('title', 'children'),
                       Input('title', 'n_clicks'))
     def make_title(n_clicks):
@@ -93,14 +130,18 @@ def profile_register_callbacks(dashapp):
     # TODO don't make the model query twice put it in a store or something maybe
     @dashapp.callback(
         Output('table-model', 'children'),
+        Output('job_id', 'value'),
+        Output('interval-component', 'disabled'),
         Input('test', 'n_clicks'),
         Input({'type': 'delete', 'index': ALL}, 'n_clicks'),
         Input({'type': 'build_button', 'index': ALL}, 'n_clicks'),
         # going to have to make inputs for the text fields with the ALL MATCH
         State({'type': 'model_name_input', 'index': ALL}, 'value'),
         State({'type': 'dataset_url_input', 'index': ALL}, 'value'),
+        State('job_id', 'value'),
+        State('interval-component', 'disabled'),
     )
-    def make_table(test, delete_click, build_click, model_name, dataset_url):
+    def make_table(test, delete_click, build_click, model_name, dataset_url, job_id, interval_disabled):
         if len(model_name) == 1:
             model_name = model_name[0]
         if len(dataset_url) == 1:
@@ -124,8 +165,13 @@ def profile_register_callbacks(dashapp):
                 # make new model
                 user.make_model(model_name, playlist_id)
 
-                # create dataset
-                #spotify_2_genius(user, playlist_id)
+                # make dataset
+                job_id = spotify_2_genius(user, playlist_id, model_name)
+                if job_id == -1:
+                    print("ERROR BAD RESPONSE FROM SPOTIFY2GENIUS API")
+                    interval_disabled = True
+                else:
+                    interval_disabled = False
             else:
                 # TODO show error
                 '''
@@ -145,9 +191,9 @@ def profile_register_callbacks(dashapp):
                 print(f'name_error:{name_error}')
                 print(f'dataset_error:{dataset_error}')
 
-
         # Delete buttons
         if delete_click == [] or delete_click.count(None) == len(delete_click):
+            # init
             pass
         else:
             res = json.loads(changed_id.split('.')[0])
@@ -184,11 +230,10 @@ def profile_register_callbacks(dashapp):
                 html.Td(dbc.Button('Build', id={'type': 'build_button', 'index': 0}, n_clicks=None))])
 
             row_list.append(new_model_row)
-            pass
 
         else:
             # else tell them to buy more
             pass
 
         table_body = [html.Tbody(row_list)]
-        return table_header + table_body
+        return table_header + table_body, job_id, interval_disabled

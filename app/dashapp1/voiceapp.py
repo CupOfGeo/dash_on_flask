@@ -9,8 +9,9 @@ import json
 import requests
 import os
 import base64
+import re
 
-#DIS IS ME HAHA
+# DIS IS ME HAHA
 import uberduckapi as ud
 
 # Generate more button
@@ -55,16 +56,16 @@ voice_layout = html.Div([
                           children=[
                               gen_button
                           ]),
+                 dbc.Button(
+                     id='voice-button',
+                     children='TO VOICE',
+                     style={'margin-top': '1%', 'width': '80%', 'height': '2%', 'line-height': '200%',
+                            'font-size': '300%'}
+                 ),
 
              ], style={'text-align': 'center'}),
 
-    dbc.Button(
-        id='voice-button',
-        children='TO_VOICE',
-        style={'margin-top': '1%', 'width': '80%', 'height': '2%', 'line-height': '200%', 'font-size': '300%'}
-    ),
-    html.Div(id='audio_holder', children=[]),
-
+    html.Div(id='audio_holder', children=[], style={'text-align': 'center'}),
 
     # Sliders get styled based on isMobile
     html.Div(id='sliders-div', children=[
@@ -74,12 +75,14 @@ voice_layout = html.Div([
             max=210,
             value=50,
             step=10,
+            # tooltip={"placement": "bottom"},
             marks={
                 10: {'label': '10', 'style': {'color': '#77b0b1', 'font-size': 'smaller'}},
                 110: {'label': 'Output Length', 'style': {'font-size': 'smaller'}},
                 210: {'label': '210', 'style': {'color': '#f50', 'font-size': 'smaller', 'white-space': 'nowrap'}}
             },
-            included=False
+            included=False,
+
         ),
 
         dcc.Slider(
@@ -88,6 +91,7 @@ voice_layout = html.Div([
             max=1.5,
             value=0.8,
             step=0.1,
+            # tooltip={"placement": "bottom"},
             marks={
                 0.5: {'label': 'Cold 0.5', 'style': {'color': '#77b0b1', 'font-size': 'smaller'}},
                 1: {'label': 'Spice', 'style': {'font-size': 'smaller'}},
@@ -167,7 +171,7 @@ def voice_register_callbacks(dashapp):
             # TODO generate a bunch of fake songs for raw_outputs.txt
             if textarea == '':
                 # out = random.choice(raw_outputs)
-                textarea = '[Verse 1:'
+                textarea = 'Rick:'
 
             out = generate_out(textarea, temp, max_tokens, pathname)
 
@@ -235,17 +239,45 @@ def voice_register_callbacks(dashapp):
         my_duck = ud.UberDuck(os.environ['UBERDUCK_Key'], os.environ['UBERDUCK_Secret'])
         # rick = my_duck.get_voice('rick-sanchez', "Hey everyone I'm alive")
         lines = text.split('\n')
+        rick_lines = []
         for line in lines:
             if 'Rick:' in line:
                 print(line)
-
+                last_line = line
+                last_line = last_line.replace('Rick: ', '')
+                rick_lines.append([last_line, 'rick'])
                 # ud.download_result(rick, 'temp.wav')
                 # ud.play_voice(rick)
             elif 'Morty: ' in line:
                 print(line)
+                last_line = line
+                last_line = last_line.replace('Morty: ', '')
+                rick_lines.append([last_line, 'morty'])
             else:
                 pass
 
-        rick = my_duck.get_voice('rick-sanchez', "It's me Rick")
+        rick_clips = []
+        out = []
+        for line in rick_lines:
+            if line[1] == 'rick':
+                rick = my_duck.get_voice('rick-sanchez', line[0])
+                if rick:
+                    out.append(html.Audio(src=rick.uuid, controls=True))
+                    rick_clips.append(rick)
+            else:
+                morty = my_duck.get_voice('morty', line[0])
+                if morty:
+                    out.append(html.Audio(src=morty.uuid, controls=True))
+                    rick_clips.append(morty)
 
-        return [html.Audio(src=rick.uuid, controls=True)]
+        return out
+
+    def line_cleaner(line):
+        re.sub(r'\([^)]*\)', line)  # remove all (text in parentheses)
+        re.sub(r'\*[^)]*\*', line)  # remove all *text in stars*
+        re.sub(r'\([^)]*\)', line)  # remove all [text in brackets]
+
+        char, text = line.split(':')[0] # get string before the :
+
+
+

@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17813b57-ee5b-4309-be23-54a6f2b1356e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/dashapp1/voiceapp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashapp1/barapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/barapp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashapp1/profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/profile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/webapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/webapp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/dashapp1/voiceapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/voiceapp.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +78,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1635536276533</updated>
-      <workItem from="1638317178620" duration="13983000" />
+      <workItem from="1638317178620" duration="19543000" />
     </task>
     <servers />
   </component>

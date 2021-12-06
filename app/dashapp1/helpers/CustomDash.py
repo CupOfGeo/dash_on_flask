@@ -1,14 +1,4 @@
 import dash
-import dash_bootstrap_components as dbc
-from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output, State, MATCH, ALL, ClientsideFunction
-
-import json
-import requests
-import os
-import base64
-from app.models import User
 from app.webapp import get_user
 
 
@@ -57,19 +47,19 @@ class CustomDash(dash.Dash):
             <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
           <div class="container-fluid">
-            <a class="navbar-brand" href="#">Ghost Rhymes</a>
+            <a class="navbar-brand" href="/">Ghost Rhymes</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarColor01">
               <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                  <a class="nav-link active" href="/">Rapper
+                  <a class="nav-link active" href="/demo/Rapper">Rapper
                     <span class="visually-hidden">(current)</span>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link active" href="/Cowboy">Cowboy
+                  <a class="nav-link active" href="/demo/Cowboy">Cowboy
                     <span class="visually-hidden">(current)</span>
                   </a>
                 </li>

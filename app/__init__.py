@@ -24,7 +24,7 @@ def register_dashapps(app):
     from app.dashapp1.extratune import tune_layout, tune_register_callbacks
     from app.dashapp1.profile import profile_layout, profile_register_callbacks
     from app.dashapp1.voiceapp import voice_layout, voice_register_callbacks
-    from app.dashapp1.CustomDash import CustomDash
+    from app.dashapp1.helpers.CustomDash import CustomDash
 
     # Meta tags for viewport responsiveness
     meta_viewport = {
@@ -33,7 +33,7 @@ def register_dashapps(app):
 
     barapp = CustomDash(__name__,
                         server=app,
-                        url_base_pathname='/',
+                        url_base_pathname='/demo/',
                         assets_folder=get_root_path(__name__) + '/dashapp1/assets/',
                         meta_tags=[meta_viewport], external_stylesheets=[dbc.themes.LUX],
                         )
@@ -54,7 +54,7 @@ def register_dashapps(app):
 
     voice = CustomDash(__name__,
                          server=app,
-                         url_base_pathname='/voice/',
+                         url_base_pathname='/',
                          assets_folder=get_root_path(__name__) + '/dashapp1/assets/',
                          meta_tags=[meta_viewport], external_stylesheets=[dbc.themes.LUX],
                          )

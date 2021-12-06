@@ -1,9 +1,7 @@
 import dash_bootstrap_components as dbc
 from dash import html, callback_context, dcc
-from dash.dependencies import Input, Output, State, MATCH, ALL
+from dash.dependencies import Input, Output, State, ALL
 from dash.exceptions import PreventUpdate
-import threading
-import polling
 
 import re
 import json
@@ -12,7 +10,7 @@ import requests
 import os
 from app.models import get_models
 
-from app.dashapp1.spotify_genius import get_playlist_name
+from app.dashapp1.helpers.spotify_genius import get_playlist_name
 from app.webapp import get_user
 
 table_header = [
@@ -166,7 +164,9 @@ def profile_register_callbacks(dashapp):
                 user.make_model(model_name, playlist_id)
 
                 # make dataset
-                job_id = spotify_2_genius(user, playlist_id, model_name)
+                # job_id = spotify_2_genius(user, playlist_id, model_name)
+                job_id = -1
+
                 if job_id == -1:
                     print("ERROR BAD RESPONSE FROM SPOTIFY2GENIUS API")
                     interval_disabled = True

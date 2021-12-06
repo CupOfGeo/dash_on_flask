@@ -1,3 +1,5 @@
+import time
+
 import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html, callback_context
@@ -8,8 +10,6 @@ import requests
 import os
 from app.webapp import get_user
 from app.dashapp1.helpers.bucket import write_file_blob
-
-
 
 good_button = dbc.Button(
     id='good-button',
@@ -32,13 +32,8 @@ back_button = dbc.Button(
     style={'margin-top': '1%', 'width': '40%', 'height': '2%', 'line-height': '100%', 'font-size': '200%'}
 )
 
-
-
 # The app layout
-tune_layout = html.Div([
-    # title
-    # html.H1("Synthetic Bars", style={'text-align': 'center', }),
-    dcc.Location(id='url'),
+button_layout = html.Div([
     html.Div(
         [
             # Main Text
@@ -68,7 +63,7 @@ tune_layout = html.Div([
                           children=[
                               good_button,
                               bad_button,
-                              #back_button
+                              # back_button
                           ]),
 
              ], style={'text-align': 'center', 'margin-bottom': '10%'}),
@@ -105,26 +100,12 @@ tune_layout = html.Div([
     ], style={'transform': 'scale(2)', 'display': 'block', 'margin-top': '5%', 'margin-left': 'auto',
               'margin-right': 'auto', 'width': '45%'}),
 
-    html.P(id='placeholder'),
     html.Div(id='div-mobile', style={"display": "none"}),
-    dcc.Store(id='session', storage_type='session', data={'clicks': 0}),
 
 ])
 
 
 def tune_register_callbacks(dashapp):
-    dashapp.clientside_callback(
-        """
-            function(label) {          
-                document.title = 'New page title : ' + label;
-                shareon();            
-            }
-            """,
-        Output('placeholder', 'children'),
-        Input('placeholder', 'n_clicks'),
-        prevent_initial_call=True
-    )
-
     dashapp.clientside_callback(
         ClientsideFunction(
             namespace='clientside',
@@ -153,61 +134,46 @@ def tune_register_callbacks(dashapp):
 
     @dashapp.callback(
         [Output('dynamic-button-container', 'children'),
-         Output("main-textarea", "value"),
-         Output("main-textarea", "rows"),
+         # Output("main-textarea", "value"),
+         # Output("main-textarea", "rows"),
          Output("loading-output", "children"),
-         Output('session', 'data')],
+         # Output('session', 'data')
+         ],
         Input('good-button', 'n_clicks'),
         Input('bad-button', 'n_clicks'),
         [State('dynamic-button-container', 'children'),
-         State("main-textarea", 'value'),
-         State('temp-slider', 'value'),
-         State('length-slider', 'value'),
-         State('session', 'data'),
-         State('url', 'pathname')])
-    def display_newbutton(n_clicks_good, n_clicks_bad, children, textarea, temperature, max_tokens, store_data):
+         # State("main-textarea", 'value'),
+         # State('temp-slider', 'value'),
+         # State('length-slider', 'value'),
+         # State('session', 'data'),
+         # State('url', 'pathname')
+         ])
+    def display_newbutton(n_clicks_good, n_clicks_bad, children):
         # on page load
-
 
         if n_clicks_good is None and n_clicks_bad is None:
             # initial load in text?
-            if textarea == '':
-                textarea = '[Verse 1:'
 
-            out = generate_out(textarea, temperature, max_tokens)
+            return children, ''
+
+        else:
 
             # children = [good_button, bad_button]
             # print('Generating a new button')
-            rows = out.count('\n')
-            rows = rows + 1
 
-            return children, out, rows, '', {'clicks': 0}
-        else:
-            # will use to keep count of swipes
-
-            store_data['clicks'] += 1
             changed_id = [p['prop_id'] for p in callback_context.triggered][0]
             if 'good' in changed_id:
                 which_button = 'good'
-                # TODO save textarea to Bucket as file
-                user = get_user()
+                time.sleep(3)  # fake work
 
-                textarea = textarea.replace('\n', '\\n')
-                textarea += '\n'
-                write_file_blob('central-bucket-george', str(user), textarea)
-            # elif 'bad' in changed_id:
-            #     which_button = 'bad'
-            #     # TODO re-roll /reject bad
-
-            textarea = '[Verse 1:'
-
-            out = generate_out(textarea, temperature, max_tokens)
+            elif 'bad' in changed_id:
+                which_button = 'bad'
+                time.sleep(10)
 
             children = [good_button, bad_button]
             # print('Generating a new button')
-            rows = out.count('\n')
-            rows = rows + 1
-            return children, out, str(rows), '', store_data
+
+            return children, ''
 
     # Disable the button while it loads
     @dashapp.callback(
@@ -222,19 +188,3 @@ def tune_register_callbacks(dashapp):
             return False, False
         else:
             return True, True
-
-    def generate_out(prompt, temperature, length, who):
-        RAPPER_API = os.getenv('API_URL')
-
-        if RAPPER_API:
-            data = {'text': prompt, 'max_tokens': length, 'temp': temperature}
-            data_json = json.dumps(data)
-            r = requests.post(RAPPER_API, data=data_json)
-            if r.status_code == 200:
-                out = r.json()['out']
-                out = out.replace('\\n', '\n')
-            else:
-                out = 'API OFFLINE'
-            return str(out)
-        else:
-            return 'MORE!'

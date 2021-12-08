@@ -22,6 +22,13 @@ gen_button = dbc.Button(
     style={'margin-top': '1%', 'width': '80%', 'height': '2%', 'line-height': '200%', 'font-size': '300%'}
 )
 
+voice_button = dbc.Button(
+    id='voice-button',
+    children='TO VOICE',
+    style={'margin-top': '1%', 'width': '80%', 'height': '2%', 'line-height': '200%',
+           'font-size': '300%'}
+)
+
 # The app layout
 voice_layout = html.Div([
     dcc.Location(id='url', refresh=False),
@@ -43,7 +50,12 @@ voice_layout = html.Div([
             # loading wheel
             dcc.Loading(
                 id="loading-wheel",
-                children=[html.Div([html.Div(id="loading-output", children='')])],
+                children=[
+                    html.Div([
+                        html.Div(id="loading-output", children=''),
+                        html.Div(id="loading-output-voice", children=''),
+                    ])
+                ],
                 type="circle",
             )
         ]),
@@ -56,16 +68,12 @@ voice_layout = html.Div([
                           children=[
                               gen_button
                           ]),
-                 dbc.Button(
-                     id='voice-button',
-                     children='TO VOICE',
-                     style={'margin-top': '1%', 'width': '80%', 'height': '2%', 'line-height': '200%',
-                            'font-size': '300%'}
-                 ),
+                html.Div(id='voice-button-container', children=[voice_button]),
 
              ], style={'text-align': 'center'}),
 
-    html.Div(id='audio_holder', children=[], style={'text-align': 'center'}),
+
+    html.Div(id='audio-holder', children=[], style={'text-align': 'center'}),
 
     # Sliders get styled based on isMobile
     html.Div(id='sliders-div', children=[
@@ -147,10 +155,13 @@ def voice_register_callbacks(dashapp):
         # return rows, style
         return style
 
+    @dashapp.callback(Output("main-textarea", "rows"), Input("main-textarea", "value"))
+    def change_rows(text):
+        return text.count('\n') + 1
+
     @dashapp.callback(
         [Output('dynamic-button-container', 'children'),
          Output("main-textarea", "value"),
-         Output("main-textarea", "rows"),
          Output("loading-output", "children"),
          Output('session', 'data')],
         Input('gen-button', 'n_clicks'),
@@ -160,11 +171,10 @@ def voice_register_callbacks(dashapp):
          State('length-slider', 'value'),
          State('session', 'data'),
          State('url', 'pathname')])
-    def display_newbutton(n_clicks, children, textarea, temp, max_tokens, store_data, pathname):
+    def more_clicked(n_clicks, children, textarea, temp, max_tokens, store_data, pathname):
         # on page load
-
         if n_clicks is None:
-            return children, textarea, '2', '', {'clicks': 0}
+            return children, textarea, '', {'clicks': 0}
         else:
             store_data['clicks'] += 1
 
@@ -181,15 +191,16 @@ def voice_register_callbacks(dashapp):
             gen_button.children = more[store_data['clicks'] % len(more)]
             children.append(gen_button)
             # print('Generating a new button')
-            rows = out.count('\n')
-            rows = rows + 1
-            return children, out, str(rows), '', store_data
+
+            # rows = out.count('\n')
+            # rows = rows + 1
+            return children, out, '', store_data
 
     @dashapp.callback(
         Output('gen-button', 'disabled'),
-        [Input('gen-button', 'n_clicks')]
+        Input('gen-button', 'n_clicks'),
     )
-    def hide_newbutton(n_clicks):
+    def hide_more(n_clicks):
         if n_clicks is None:
             return False
         else:
@@ -227,14 +238,20 @@ def voice_register_callbacks(dashapp):
 
     # I want to output a list of buttons that you can pick which to save.
     @dashapp.callback(
-        Output('audio_holder', 'children'),
+        Output('voice-button-container', 'children'),
+        Output('audio-holder', "children"),
+        Output("loading-output-voice", "children"),
         Input('voice-button', 'n_clicks'),
         State("main-textarea", 'value'),
+        State('voice-button-container', 'children'),
     )
-    def voice_turn_to_voice(n_clicks, text):
+    def voice_turn_to_voice(n_clicks, text, children):
+        print("HEY!!")
         if n_clicks is None:
-            return []
+            print("No click VOICE")
+            return [voice_button], [], ''
 
+        print("GETTING VOICE")
         # install uberduckapi HAHA
         my_duck = ud.UberDuck(os.environ['UBERDUCK_Key'], os.environ['UBERDUCK_Secret'])
         # rick = my_duck.get_voice('rick-sanchez', "Hey everyone I'm alive")
@@ -270,14 +287,26 @@ def voice_register_callbacks(dashapp):
                     out.append(html.Audio(src=morty.uuid, controls=True))
                     rick_clips.append(morty)
 
-        return out
+        children.pop()
+        children.append(voice_button)
+
+        return children, out, ''
+
+
+    @dashapp.callback(
+        Output('voice-button', 'disabled'),
+        Input('voice-button', 'n_clicks')
+    )
+    def hide_voice(n_clicks):
+        if n_clicks is None:
+            return False
+        else:
+            print('Disabling the button')
+            return True
 
     def line_cleaner(line):
         re.sub(r'\([^)]*\)', line)  # remove all (text in parentheses)
         re.sub(r'\*[^)]*\*', line)  # remove all *text in stars*
         re.sub(r'\([^)]*\)', line)  # remove all [text in brackets]
 
-        char, text = line.split(':')[0] # get string before the :
-
-
-
+        char, text = line.split(':')[0]  # get string before the :

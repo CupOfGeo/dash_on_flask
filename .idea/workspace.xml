@@ -2,16 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17813b57-ee5b-4309-be23-54a6f2b1356e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/dashapp1/helpers/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/dashapp1/helpers/loading_button.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashapp1/CustomDash.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/helpers/CustomDash.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashapp1/bucket.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/helpers/bucket.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashapp1/extratune.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/extratune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashapp1/profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/profile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/dashapp1/spotify_genius.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/helpers/spotify_genius.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/dashapp1/helpers/CustomDash.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/helpers/CustomDash.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/dashapp1/voiceapp.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/dashapp1/voiceapp.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +80,8 @@
       <option name="presentableId" value="Default" />
       <updated>1635536276533</updated>
       <workItem from="1638317178620" duration="22481000" />
-      <workItem from="1638795696060" duration="415000" />
+      <workItem from="1638795696060" duration="1862000" />
+      <workItem from="1638908887756" duration="5257000" />
     </task>
     <servers />
   </component>
